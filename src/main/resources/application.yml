@@ -1,0 +1,45 @@
+server:
+  port: 8000
+spring:
+  application:
+    name: gateway-service
+  cloud:
+    gateway:
+      default-filters:
+        - name: GlobalFilter
+          args:
+            baseMessage: Spring Cloud Gateway global Filter
+            preLogger: true
+            postLogger: true
+
+      routes:
+        - id: order-service
+          uri: lb://ORDER-SERVICE
+          predicates:
+            - Path=/order/**
+          filters:
+            - AddRequestHeader=order-request, order-requests-header2
+            - AddResponseHeader=order-response, order-response-header2
+            - name: LoggingFilter
+              args:
+                baseMessage: test
+                preLogger: true
+                postLogger: true
+            - name: CustomFilter
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/**
+          filters:
+            - AddRequestHeader=user-request, user-requests-header2
+            - AddResponseHeader=user-response, user-response-header2
+            - CustomFilter
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka
