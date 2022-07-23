@@ -37,6 +37,16 @@ spring:
             - CustomFilter
             - RewritePath=/user/(?<segment>.*), /$\{segment}
 
+        - id: catalog-service
+          uri: lb://CATALOG-SERVICE
+          predicates:
+            - Path=/catalog/**
+          filters:
+            - AddRequestHeader=user-request, user-requests-header2
+            - AddResponseHeader=user-response, user-response-header2
+            - CustomFilter
+            - RewritePath=/catalog/(?<segment>.*), /$\{segment}
+
 eureka:
   client:
     register-with-eureka: true
