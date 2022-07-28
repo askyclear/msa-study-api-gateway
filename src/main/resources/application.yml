@@ -27,16 +27,45 @@ spring:
                 postLogger: true
             - name: CustomFilter
             - RewritePath=/order/(?<segment>.*), /$\{segment}
+#        - id: user-service
+#          uri: lb://USER-SERVICE
+#          predicates:
+#            - Path=/user/**
+#          filters:
+#            - AddRequestHeader=user-request, user-requests-header2
+#            - AddResponseHeader=user-response, user-response-header2
+#            - CustomFilter
+#            - RewritePath=/user/(?<segment>.*), /$\{segment}
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
-            - Path=/user/**
+            - Path=/user/login
+            - Method=POST
           filters:
             - AddRequestHeader=user-request, user-requests-header2
             - AddResponseHeader=user-response, user-response-header2
             - CustomFilter
             - RewritePath=/user/(?<segment>.*), /$\{segment}
-
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/users
+            - Method=POST
+          filters:
+            - AddRequestHeader=user-request, user-requests-header2
+            - AddResponseHeader=user-response, user-response-header2
+            - CustomFilter
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/**
+            - Method=GET
+          filters:
+            - AddRequestHeader=user-request, user-requests-header2
+            - AddResponseHeader=user-response, user-response-header2
+            - CustomFilter
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
           predicates:
