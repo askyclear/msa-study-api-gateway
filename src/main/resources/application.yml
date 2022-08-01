@@ -65,6 +65,7 @@ spring:
             - AddRequestHeader=user-request, user-requests-header2
             - AddResponseHeader=user-response, user-response-header2
             - CustomFilter
+            - AuthorizationHeaderFilter
             - RewritePath=/user/(?<segment>.*), /$\{segment}
         - id: catalog-service
           uri: lb://CATALOG-SERVICE
@@ -82,3 +83,6 @@ eureka:
     fetch-registry: true
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
+
+token:
+  secret: user_token
