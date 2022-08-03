@@ -59,6 +59,26 @@ spring:
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
+            - Path=/user/actuator/**
+            - Method=GET, POST
+          filters:
+            - AddRequestHeader=user-request, user-requests-header2
+            - AddResponseHeader=user-response, user-response-header2
+            - CustomFilter
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
+            - Path=/user/health_check
+            - Method=GET
+          filters:
+            - AddRequestHeader=user-request, user-requests-header2
+            - AddResponseHeader=user-response, user-response-header2
+            - CustomFilter
+            - RewritePath=/user/(?<segment>.*), /$\{segment}
+        - id: user-service
+          uri: lb://USER-SERVICE
+          predicates:
             - Path=/user/**
             - Method=GET
           filters:
@@ -84,5 +104,14 @@ eureka:
     service-url:
       defaultZone: http://127.0.0.1:8761/eureka
 
-token:
-  secret: user_token
+#token:
+#  secret: user_token
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh, health, beans, httptrace
+logging:
+  level:
+    root: debug
