@@ -18,4 +18,10 @@ routes:
     - preLogger: true
     - postLogger: true
 - name: CustomFilter
-- RewritePath=/order/(?<segment>.*), /$\{segment}  // gateway uri를 rewrite하는 설정 
+- RewritePath=/order/(?<segment>.*), /$\{segment}  // gateway uri를 rewrite하는 설정
+
+## Cloud Config(bootstrap.yml설정)
+- config, bootstarp, actuator, bus-amqp dependency 추가
+- bbotstarp.yml 설정 확인
+- management.endpoints.web.exposure.include: busrefresh
+- amqp (rabbit mq 또는 kafka 설정)
