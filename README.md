@@ -25,3 +25,10 @@ routes:
 - bbotstarp.yml 설정 확인
 - management.endpoints.web.exposure.include: busrefresh
 - amqp (rabbit mq 또는 kafka 설정)
+
+## Docker
+docker run -d -p 8000:8000 --network ecommerce-network \
+-e "spring.cloud.config.uri=http://config-service:8888" \
+-e "spring.rabbitmq.host=rabbitmq" \
+-e "eureka.client.serviceUrl.defaultZone=http://discovery-service:8761/eureka/" \
+--name apigateway-service askyclear/apigateway:1.0
